@@ -46,7 +46,14 @@ jobs:
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
-          key: ${{ secrets.SSH_KEY }}
+          password: ${{ secrets.PASSWORD }}
+          # key: ${{ secrets.SSH_KEY }}
           envs: IMAGE_NAME,REGISTRY,{{ secrets.DO_ACCESS_TOKEN }},GITHUB_SHA
           script: |
             docker login -u ${{ secrets.DO_ACCESS_TOKEN }} -p ${{ secrets.DO_ACCESS_TOKEN }} registry.digitalocean.com
+            docker stop $(echo $IMAGE_NAME)
+            docker rm -f $(echo $IMAGE_NAME)
+            docker run -d \
+            --restart always \
+            --name $(echo $IMAGE_NAME) \
+            $(echo $REGISTRY)/$(echo $IMAGE_NAME):$(echo $GITHUB_SHA | head -c7)
