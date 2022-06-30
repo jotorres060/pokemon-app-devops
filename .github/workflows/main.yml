@@ -49,6 +49,7 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           envs: IMAGE_NAME,REGISTRY,{{ secrets.DO_ACCESS_TOKEN }},GITHUB_SHA
           script: |
+            doctl registry login --expiry-seconds 600
             docker login -u ${{ secrets.DO_ACCESS_TOKEN }} -p ${{ secrets.DO_ACCESS_TOKEN }} registry.digitalocean.com
             docker stop $(echo $IMAGE_NAME)
             docker rm -f $(echo $IMAGE_NAME)
