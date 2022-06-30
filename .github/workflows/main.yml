@@ -28,7 +28,7 @@ jobs:
           token: ${{ secrets.DO_ACCESS_TOKEN }}
     
       - name: "Conectar al container registry"
-        run: doctl registry login --expiry-seconds 600
+        run: doctl registry login
       
       - name: "Eliminar imagenes antiguas"
         run: if [ ! -z "$(doctl registry repository list | grep "$(echo $IMAGE_NAME)")" ]; then doctl registry repository delete-manifest $(echo $IMAGE_NAME) $(doctl registry repository list-tags $(echo $IMAGE_NAME) | grep -o "sha.*") --force; else echo "No repository"; fi
@@ -49,11 +49,4 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           envs: IMAGE_NAME,REGISTRY,{{ secrets.DO_ACCESS_TOKEN }},GITHUB_SHA
           script: |
-            doctl registry login --expiry-seconds 600
             docker login -u ${{ secrets.DO_ACCESS_TOKEN }} -p ${{ secrets.DO_ACCESS_TOKEN }} registry.digitalocean.com
-            docker stop $(echo $IMAGE_NAME)
-            docker rm -f $(echo $IMAGE_NAME)
-            docker run -d \
-            --restart always \
-            --name $(echo $IMAGE_NAME) \
-            $(echo $REGISTRY)/$(echo $IMAGE_NAME):$(echo $GITHUB_SHA | head -c7)
