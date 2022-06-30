@@ -42,11 +42,11 @@ jobs:
     
     steps:
       - name: "Realizar despliegue en el droplet"
-        uses: appleboy/ssh-action@v0.1.3
+        uses: appleboy/ssh-action@v0.1.4
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
-          key: ${{ secrets.SSHKEY }}
+          key: ${{ secrets.SSH_KEY }}
           envs: IMAGE_NAME,REGISTRY,{{ secrets.DO_ACCESS_TOKEN }},GITHUB_SHA
           script: |
             docker login -u ${{ secrets.DO_ACCESS_TOKEN }} -p ${{ secrets.DO_ACCESS_TOKEN }} registry.digitalocean.com
