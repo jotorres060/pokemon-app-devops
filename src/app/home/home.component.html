@@ -1,6 +1,6 @@
 <div class="row" *ngIf="pokemons.length > 0; else divProgress">
   <div class="col-md-12 col-lg-6 col-xl-4 mb-5" *ngFor="let pokemon of pokemons">
-    <p-card styleClass="p-card-shadow py-0" [header]="pokemon.name | uppercase">
+    <p-card styleClass="p-card-shadow py-0" [header]="pokemon.name | uppercase" [subheader]="'#'+pokemon.id">
       <ng-template pTemplate="header">
         <img [src]="pokemon.sprites.other.home.front_default">
       </ng-template>
